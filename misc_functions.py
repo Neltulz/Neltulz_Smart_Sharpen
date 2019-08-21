@@ -6,7 +6,7 @@ import bpy
 
 def neltulzPrint(self, context, messageType, logMessage):
     #accepted messageTypes: DEBUG, INFO, OPERATOR, PROPERTY, WARNING, ERROR, ERROR_INVALID_INPUT, ERROR_INVALID_CONTEXT, ERROR_OUT_OF_MEMORY
-    print('---[' + messageType + ']---: ' + logMessage)
+    print('---[INFO]---: ---[' + messageType + ']---: ' + logMessage)
 
     def errorPopup(self, context):
         messageLogPrepend = ''
@@ -63,57 +63,66 @@ def getCurrentSelectMode(self, context):
 # -----------------------------------------------------------------------------
 
 def smoothShadeAndAutoSmoothNormals(self, context):
+    
+    scene = context.scene
 
-    if self.bUseAdvancedSettings:
-        #Smooth shade mesh
-        if self.bSmoothShade:
-            bpy.ops.object.shade_smooth()
-            neltulzPrint(self, context, 'INFO', 'Smooth shaded object')
-        else:
-            neltulzPrint(self, context, 'ERROR', '"Smooth Shade Object" is unchecked.  This means your entire object is being flat shaded!  Please enable "Smooth Shade Object"!')
-            bpy.ops.object.shade_flat()
+    sel_objs = [obj for obj in bpy.context.selected_objects if obj.type == 'MESH']
+
+    if scene.neltulzSmartSharpen.bUseAdvancedSettingsCheckbox:
 
         #Enable auto smooth
-        bpy.context.object.data.use_auto_smooth = self.bAutoSmoothNormals
-        
-        #Set auto smooth angle 
-        if self.bAutoSmoothNormals:
+        for currentObject in sel_objs:
 
-            neltulzPrint(self, context, 'INFO', '"Auto Smooth Normals" Enabled')
+            #Smooth shade mesh
+            if scene.neltulzSmartSharpen.bSmoothShadeCheckbox:
+                bpy.ops.object.shade_smooth()
+                print('---[INFO]---: Smooth shaded object')
+            else:
+                print('---[ERROR]---: "Smooth Shade Object" is unchecked.  This means your entire object is being flat shaded!  Please enable "Smooth Shade Object"!')
+                bpy.ops.object.shade_flat()
 
-            bpy.context.object.data.auto_smooth_angle = self.autoSmoothValue*(3.14159/180)
             
-            if self.autoSmoothValue >= 89.9:
-                neltulzPrint(self, context, 'INFO', '"Auto Smooth Normals" Angle is ' + str(self.autoSmoothValue) + '.  This is good!')
+            currentObject.data.use_auto_smooth = scene.neltulzSmartSharpen.bAutoSmoothCheckbox
+        
+            #Set auto smooth angle 
+            if scene.neltulzSmartSharpen.bAutoSmoothCheckbox:
 
-            elif self.autoSmoothValue >= 45:
-                neltulzPrint(self, context, 'WARNING', '"Auto Smooth Normals" Angle is ' + str(self.autoSmoothValue) + '.  This is okay. Recommend changing this value to at least 89.9 for better results')
+                print('---[INFO]---: "Auto Smooth Normals" Enabled')
 
-            elif self.autoSmoothValue >= 30:
-                neltulzPrint(self, context, 'ERROR', '"Auto Smooth Normals" Angle is ' + str(self.autoSmoothValue) + '.  This is NOT a good value. Recommend changing this value to at least 89.9 for better results')
+                currentObject.data.auto_smooth_angle = scene.neltulzSmartSharpen.bAutoSmoothSlider*(3.14159/180)
+                
+                if scene.neltulzSmartSharpen.bAutoSmoothSlider >= 89.9:
+                    print('---[INFO]---: "Auto Smooth Normals" Angle is ' + str(scene.neltulzSmartSharpen.bAutoSmoothSlider) + '.  This is good!')
 
-            elif self.autoSmoothValue > 1:
-                neltulzPrint(self, context, 'ERROR', '"Auto Smooth Normals" Angle is ' + str(self.autoSmoothValue) + '.  This is VERY BAD. Recommend changing this value to at least 89.9 for better results')
+                elif scene.neltulzSmartSharpen.bAutoSmoothSlider >= 45:
+                    print('---[WARNING]---: "Auto Smooth Normals" Angle is ' + str(scene.neltulzSmartSharpen.bAutoSmoothSlider) + '.  This is okay. Recommend changing this value to at least 89.9 for better results')
+
+                elif scene.neltulzSmartSharpen.bAutoSmoothSlider >= 30:
+                    print('---[ERROR]---: "Auto Smooth Normals" Angle is ' + str(scene.neltulzSmartSharpen.bAutoSmoothSlider) + '.  This is NOT a good value. Recommend changing this value to at least 89.9 for better results')
+
+                elif scene.neltulzSmartSharpen.bAutoSmoothSlider > 1:
+                    print('---[ERROR]---: "Auto Smooth Normals" Angle is ' + str(scene.neltulzSmartSharpen.bAutoSmoothSlider) + '.  This is VERY BAD. Recommend changing this value to at least 89.9 for better results')
+
+                else:
+                    print('---[ERROR]---: "Auto Smooth Normals" Angle is ' + str(scene.neltulzSmartSharpen.bAutoSmoothSlider) + '.  This is HORRIBLE.  You will see a nearly fully sharpened object. Recommend changing this value to at least 89.9 for better results')
+
 
             else:
-                neltulzPrint(self, context, 'ERROR', '"Auto Smooth Normals" Angle is ' + str(self.autoSmoothValue) + '.  This is HORRIBLE.  You will see a nearly fully sharpened object. Recommend changing this value to at least 89.9 for better results')
-
-
-        else:
-            neltulzPrint(self, context, 'ERROR', '"Auto Smooth Normals" is disabled!  Please enable "Auto Smooth Normals" fom the "Neltulz - Smart Sharpen" Panel to see a result!')
+                print('---[ERROR]---: "Auto Smooth Normals" is disabled!  Please enable "Auto Smooth Normals" fom the "Neltulz - Smart Sharpen" Panel to see a result!')
 
     else:#user did not specify any advanced settings
         
         #smooth shade the object
         bpy.ops.object.shade_smooth()
-        neltulzPrint(self, context, 'INFO', 'Smooth shaded object')
+        print('---[INFO]---: Smooth shaded object')
 
         #Enable auto smooth
-        bpy.context.object.data.use_auto_smooth = self.bAutoSmoothNormals
+        for currentObject in sel_objs:
+            currentObject.data.use_auto_smooth = True
 
-        #set angle to 180 degrees
-        bpy.context.object.data.auto_smooth_angle = 180*(3.14159/180)
-        neltulzPrint(self, context, 'INFO', '"Auto Smooth Normals" Angle is 180.  This is good!')
+            #set angle to 180 degrees
+            currentObject.data.auto_smooth_angle = 180*(3.14159/180)
+        print('---[INFO]---: "Auto Smooth Normals" Angle is 180.  This is good!')
 
 
 

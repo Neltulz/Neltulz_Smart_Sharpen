@@ -7,28 +7,29 @@ from . import misc_functions
 # -----------------------------------------------------------------------------
 
 def execute(self, context, currentObj, currentSel_vertIDs, currentSel_edgeIDs, currentSel_faceIDs, currentDesel_edgeIDs):
-    #Figure out a way to auto sharpen only on the selected things
 
     if self.degreesValue <= 0:
         #if current select mode is vertice, use verts when marking sharp, otherwise sharpen normally
         if misc_functions.getCurrentSelectMode(self, context) == 1:
             bpy.ops.mesh.mark_sharp(use_verts=True)
             
-            misc_functions.neltulzPrint(self, context, 'INFO', 'The selection was sharpened')
+            print('---[INFO]---: The selection was sharpened')
         else:
             bpy.ops.mesh.mark_sharp(use_verts=False)
 
-            misc_functions.neltulzPrint(self, context, 'INFO', 'The selection was softened')
+            print('---[INFO]---: The selection was softened')
         
     elif self.degreesValue >= 180:
         #if current select mode is vertice, use verts when marking soft, otherwise soften normally
         if misc_functions.getCurrentSelectMode(self, context) == 1:
             bpy.ops.mesh.mark_sharp(clear=True, use_verts=True)
-            misc_functions.neltulzPrint(self, context, 'INFO', 'Only the selected things were softened (Including Vertices)')
+            print('---[INFO]---: Only the selected things were softened (Including Vertices)')
         else:
             bpy.ops.mesh.mark_sharp(clear=True, use_verts=False)
-            misc_functions.neltulzPrint(self, context, 'INFO', 'Only the selected things were softened')
+            print('---[INFO]---: Only the selected things were softened')
     else:
+
+        
 
         #clear sharp
         bpy.ops.mesh.mark_sharp(clear=True, use_verts=False)
@@ -45,7 +46,6 @@ def execute(self, context, currentObj, currentSel_vertIDs, currentSel_edgeIDs, c
         
         
         
-
 
 
 
@@ -71,8 +71,6 @@ def execute(self, context, currentObj, currentSel_vertIDs, currentSel_edgeIDs, c
                 currentSelectionSharpEdgeIndices.add(e.index)
 
         sharpEdgesWithoutDeselectedIndices = currentSelectionSharpEdgeIndices - currentDesel_edgeIDs
-        
-            
 
 
         
@@ -131,5 +129,5 @@ def execute(self, context, currentObj, currentSel_vertIDs, currentSel_edgeIDs, c
         #switch to Edit Mode
         bpy.ops.object.editmode_toggle()
 
-        misc_functions.neltulzPrint(self, context, 'INFO', 'Selected sharp edges by ' + str(self.degreesValue) + 'deg (' + str(sharpnessValue) + ') and sharpened')
+        print('---[INFO]---: Selected sharp edges by ' + str(self.degreesValue) + 'deg (' + str(sharpnessValue) + ') and sharpened')
 # END smart_sharp_selected()

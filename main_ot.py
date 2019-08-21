@@ -15,48 +15,11 @@ class OBJECT_OT_NeltulzSmartSharpen(bpy.types.Operator):
 
     degreesValue: bpy.props.FloatProperty \
     (
-    name="Degrees Value =",
-    description="Degrees you would like to smart sharpen edges by",
-    default=1,
-    min = 0,
-    max = 180
-    )
-
-    bUseAdvancedSettings: bpy.props.BoolProperty \
-    (
-        name="Use Advanced Settings (Default: False)",
-        description="Enables the use of advanced settings",
-        default=False
-    )
-
-    bSmoothShade: bpy.props.BoolProperty \
-    (
-        name="Smooth Shade (Default: True)",
-        description="Enables smooth shading on object.  Recommended (True) to guarantee smart sharpen result.",
-        default=True
-    )
-
-    bAutoSmoothNormals: bpy.props.BoolProperty \
-    (
-        name="Auto Smooth Normals (Default: True)",
-        description='Enables "Auto Smooth" on object normals. Recommended (True) to guarantee smart sharpen result.',
-        default=True
-    )
-
-    autoSmoothValue: bpy.props.FloatProperty \
-    (
-        name="Auto Smooth Angle (Default: 180) =",
-        description="The dynamic auto smooth value.  Recommended (180) to guarantee smart sharpen result",
-        default=180,
+        name="Degrees Value =",
+        description="Degrees you would like to smart sharpen edges by",
+        default=1,
         min = 0,
         max = 180
-    )
-
-    bDisableErrorPopups: bpy.props.BoolProperty \
-    (
-        name="Disable Error Popups",
-        description='Disables those nasty error popups that appear when using the advanced settings in the "Neltulz - Smart Sharpen" Panel.',
-        default=False
     )
 
     @classmethod
@@ -65,8 +28,8 @@ class OBJECT_OT_NeltulzSmartSharpen(bpy.types.Operator):
 
     def execute(self, context):
 
-        misc_functions.neltulzPrint(self, context, 'INFO', '--------------------------------------------------------------------------------')
-        misc_functions.neltulzPrint(self, context, 'INFO', 'Neltulz - Smart Sharpen - Started')
+        print('---[INFO]---: --------------------------------------------------------------------------------')
+        print('---[INFO]---: Neltulz - Smart Sharpen - Started')
 
         # -----------------------------------------------------------------------------
         #   Check whether user is in "Edit Mode" or "Object Mode"
@@ -78,111 +41,107 @@ class OBJECT_OT_NeltulzSmartSharpen(bpy.types.Operator):
 
         if bpy.context.object.mode == "EDIT":
             
-            misc_functions.neltulzPrint(self, context, 'INFO', '"Edit mode" Detected')
+            print('---[INFO]---: "Edit mode" Detected')
 
             # -----------------------------------------------------------------------------
             #   Smooth Mesh & Set smoothing angle to 180 degrees. This ensures that auto
             #   smooth doesn't override marked sharp edges.
             # -----------------------------------------------------------------------------
 
-            #switch to Object Mode
-            bpy.ops.object.editmode_toggle()
+            bpy.ops.object.mode_set(mode='OBJECT') #switch to object mode
 
             #Smooth mesh
             misc_functions.smoothShadeAndAutoSmoothNormals(self, context)
 
-            #switch back to Edit Mode
-            bpy.ops.object.editmode_toggle()
+            bpy.ops.object.mode_set(mode='EDIT') #switch to edit mode
 
             # -----------------------------------------------------------------------------
             #    User is in Edit mode, some things must be checked before determining
             #    The next course of action.
             # -----------------------------------------------------------------------------
 
-            #Get current object, store it as var
-            currentObj = bpy.context.active_object 
+            sel_objs = [obj for obj in bpy.context.selected_objects if obj.type == 'MESH']
 
-            #update current Object from edit mode
-            currentObj.update_from_editmode()
             
-            #if user has multiple select modes enabled, then fail and prevent the script from doing anything further
-            if misc_functions.getCurrentSelectMode(self, context) == 0:
-                misc_functions.neltulzPrint(self, context, 'ERROR', 'Multiple Select mode is unsupported.  Please select only one mode (Vertice, Edge, or Face')
+            for currentObj in sel_objs:
 
-            else:
+                bpy.ops.object.mode_set(mode='OBJECT') #switch to object mode
+
+                bpy.ops.object.select_all(action='DESELECT')
+
+                bpy.data.objects[currentObj.data.name].select_set(True)
+                bpy.context.view_layer.objects.active = currentObj
                 
-                #print which selection mode is detected
-                if misc_functions.getCurrentSelectMode(self, context) == 1:
-                    misc_functions.neltulzPrint(self, context, 'INFO', 'Vertice Select Mode" Detected')
-                elif misc_functions.getCurrentSelectMode(self, context) == 2:
-                    misc_functions.neltulzPrint(self, context, 'INFO', 'Edge Select Mode" Detected')
+                bpy.ops.object.mode_set(mode='EDIT') #switch to edit mode
+
+                #update current Object from edit mode
+                currentObj.update_from_editmode()
+                
+                        
+
+                #if user has multiple select modes enabled, then fail and prevent the script from doing anything further
+                if misc_functions.getCurrentSelectMode(self, context) == 0:
+                    print('---[ERROR]---: Multiple Select mode is unsupported.  Please select only one mode (Vertice, Edge, or Face')
+
                 else:
-                    misc_functions.neltulzPrint(self, context, 'INFO', 'Face Select Mode" Detected')
-
-                #store a list of currently selected vertice indices
-                currentSel_vertIDs = set()
-                for v in currentObj.data.vertices:
-                    if v.select:
-                        currentSel_vertIDs.add(v.index)
-
-                #store a list of currently selected edge indices
-                currentSel_edgeIDs = set()
-                for e in currentObj.data.edges:
-                    if e.select:
-                        currentSel_edgeIDs.add(e.index)
-
-                #store a list of currently selected face indices
-                currentSel_faceIDs = set()
-                for f in currentObj.data.polygons:
-                    if f.select:
-                        currentSel_faceIDs.add(f.index)
-
-                #store a list of currently deselected edge indices 
-                currentDesel_edgeIDs = set()    
-                for e in currentObj.data.edges:
-                    if not e.select:
-                        currentDesel_edgeIDs.add(e.index)
-
-                #print the number of selected vertices, edges, and faces
-                numVerts_Selected = len( [v for v in currentObj.data.vertices if v.select] )
-                misc_functions.neltulzPrint(self, context, 'INFO', 'Detected ' + str(numVerts_Selected) + ' vertices selected')
-                
-                numEdges_Selected = len( [e for e in currentObj.data.edges if e.select] )
-                misc_functions.neltulzPrint(self, context, 'INFO', 'Detected ' + str(numEdges_Selected) + ' edges selected')
-                
-                numFaces_Selected = len( [f for f in currentObj.data.polygons if f.select] )
-                misc_functions.neltulzPrint(self, context, 'INFO', 'Detected ' + str(numFaces_Selected) + ' faces selected')
-
-                # -----------------------------------------------------------------------------
-                #   If there is nothing selected, then auto sharpen entire object, otherwise, 
-                #   sharpen only on selected
-                # -----------------------------------------------------------------------------
-
-                if numVerts_Selected <= 0:
-
-                    #switch to edge mode
-                    bpy.ops.mesh.select_mode(use_extend=False, use_expand=True, type='EDGE')
-
-                    #Select All
-                    bpy.ops.mesh.select_all(action='SELECT')
-
-                    smart_sharpen_entire_obj.execute(self, context)
-
-                    #Deselect All
-                    bpy.ops.mesh.select_all(action='DESELECT')
-
-                    #Switch back to previous selection mode before selecting sharp edges
-                    if (previousSelectMode == 1):
-                        bpy.ops.mesh.select_mode(use_extend=False, use_expand=True, type='VERT')
-                    elif (previousSelectMode == 3):
-                        bpy.ops.mesh.select_mode(use_extend=False, use_expand=True, type='FACE')
+                    
+                    #print which selection mode is detected
+                    if misc_functions.getCurrentSelectMode(self, context) == 1:
+                        print('---[INFO]---: Vertice Select Mode" Detected')
+                    elif misc_functions.getCurrentSelectMode(self, context) == 2:
+                        print('---[INFO]---: Edge Select Mode" Detected')
                     else:
-                        pass
-                else:
-                    #pass the current selection when running the function
+                        print('---[INFO]---: Face Select Mode" Detected')
+
+                    #store a list of currently selected vertice indices
+                    currentSel_vertIDs = set()
+                    for v in currentObj.data.vertices:
+                        if v.select:
+                            currentSel_vertIDs.add(v.index)
+
+                    #store a list of currently selected edge indices
+                    currentSel_edgeIDs = set()
+                    for e in currentObj.data.edges:
+                        if e.select:
+                            currentSel_edgeIDs.add(e.index)
+
+                    #store a list of currently selected face indices
+                    currentSel_faceIDs = set()
+                    for f in currentObj.data.polygons:
+                        if f.select:
+                            currentSel_faceIDs.add(f.index)
+
+                    #store a list of currently deselected edge indices 
+                    currentDesel_edgeIDs = set()    
+                    for e in currentObj.data.edges:
+                        if not e.select:
+                            currentDesel_edgeIDs.add(e.index)
+
+                    #print the number of selected vertices, edges, and faces
+                    numVerts_Selected = len( [v for v in currentObj.data.vertices if v.select] )
+                    print('---[INFO]---: Detected ' + str(numVerts_Selected) + ' vertices selected')
+                    
+                    numEdges_Selected = len( [e for e in currentObj.data.edges if e.select] )
+                    print('---[INFO]---: Detected ' + str(numEdges_Selected) + ' edges selected')
+                    
+                    numFaces_Selected = len( [f for f in currentObj.data.polygons if f.select] )
+                    print('---[INFO]---: Detected ' + str(numFaces_Selected) + ' faces selected')
+
                     smart_sharpen_selected.execute(self, context, currentObj, currentSel_vertIDs, currentSel_edgeIDs, currentSel_faceIDs, currentDesel_edgeIDs)
-        
-            # END checkThings()
+
+
+                #Smart Sharpening Finished - Now we need to reselect all of the previously selected objects, and return to edit mode
+
+                bpy.ops.object.mode_set(mode='OBJECT') #switch to object mode
+
+                bpy.ops.object.select_all(action='DESELECT')
+
+                for currentObj in sel_objs:
+                    bpy.data.objects[currentObj.data.name].select_set(True)
+
+                bpy.ops.object.mode_set(mode='EDIT') #switch to edit mode
+
+                
             
             
         elif bpy.context.object.mode == "OBJECT":
@@ -190,7 +149,7 @@ class OBJECT_OT_NeltulzSmartSharpen(bpy.types.Operator):
             #detect if something is selected
             if bpy.context.selected_objects:
 
-                misc_functions.neltulzPrint(self, context, 'INFO', 'Object mode" Detected')
+                print('---[INFO]---: Object mode" Detected')
 
                 #Smooth mesh
                 misc_functions.smoothShadeAndAutoSmoothNormals(self, context)
@@ -218,14 +177,14 @@ class OBJECT_OT_NeltulzSmartSharpen(bpy.types.Operator):
                 bpy.ops.object.editmode_toggle()
 
             else:
-                misc_functions.neltulzPrint(self, context, 'ERROR', 'Please select an object before running the script!')
+                print('---[ERROR]---: Please select an object before running the script!')
 
         else:
-            misc_functions.neltulzPrint(self, context, 'ERROR', 'Unable to detect "object" or "edit" mode.  Canceling.')
+            print('---[ERROR]---: Unable to detect "object" or "edit" mode.  Canceling.')
 
-        print(' ')
-        print('Neltulz - Smart Sharpen - Finished')
-        print('--------------------------------------------------------------------------------')
+        print('---[INFO]---:  ')
+        print('---[INFO]---: Neltulz - Smart Sharpen - Finished')
+        print('---[INFO]---: --------------------------------------------------------------------------------')
 
         return {'FINISHED'}
     # END execute()

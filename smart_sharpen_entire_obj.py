@@ -21,12 +21,12 @@ def execute(self, context):
         #mark sharp
         bpy.ops.mesh.mark_sharp()
 
-        misc_functions.neltulzPrint(self, context, 'INFO', 'Entire object was sharpened')
+        print('---[INFO]---: Entire object was sharpened')
 
     elif self.degreesValue >= 180:
         #do nothing, all sharp edges were already cleared prior to this!
 
-        misc_functions.neltulzPrint(self, context, 'INFO', 'Entire object was softened')
+        print('---[INFO]---: Entire object was softened')
 
     else:
         #Deselect All
@@ -37,7 +37,7 @@ def execute(self, context):
         bpy.ops.mesh.edges_select_sharp( sharpness=sharpnessValue )
 
 
-        misc_functions.neltulzPrint(self, context, 'INFO', 'Selected sharp edges by ' + str(self.degreesValue) + 'deg (' + str(sharpnessValue) + ') and sharpened')
+        print('---[INFO]---: Selected sharp edges by ' + str(self.degreesValue) + 'deg (' + str(sharpnessValue) + ') and sharpened')
 
         #mark sharp
         bpy.ops.mesh.mark_sharp()
