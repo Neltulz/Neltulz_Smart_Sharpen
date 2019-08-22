@@ -3,7 +3,7 @@ bl_info = {
     "author" : "Neil V. Moore",
     "description" : "Context Aware Smart Sharpen",
     "blender" : (2, 80, 0),
-    "version" : (1, 0, 5),
+    "version" : (1, 0, 6),
     "location" : "View3D",
     "warning" : "",
     "category" : "Generic"

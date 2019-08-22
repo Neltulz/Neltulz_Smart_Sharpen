@@ -69,7 +69,7 @@ class OBJECT_OT_NeltulzSmartSharpen(bpy.types.Operator):
 
                 bpy.ops.object.select_all(action='DESELECT')
 
-                bpy.data.objects[currentObj.data.name].select_set(True)
+                currentObj.select_set(True)
                 bpy.context.view_layer.objects.active = currentObj
                 
                 bpy.ops.object.mode_set(mode='EDIT') #switch to edit mode
@@ -137,7 +137,7 @@ class OBJECT_OT_NeltulzSmartSharpen(bpy.types.Operator):
                 bpy.ops.object.select_all(action='DESELECT')
 
                 for currentObj in sel_objs:
-                    bpy.data.objects[currentObj.data.name].select_set(True)
+                    currentObj.select_set(True)
 
                 bpy.ops.object.mode_set(mode='EDIT') #switch to edit mode
 

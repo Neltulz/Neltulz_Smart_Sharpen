@@ -25,7 +25,7 @@ from bpy.types import (Panel,
 class OBJECT_PT_NeltulzSmartSharpen(Panel):
 
     bl_idname = "object.neltulz_smart_sharpen_panel"
-    bl_label = "Smart Sharpen v1.0.5"
+    bl_label = "Smart Sharpen v1.0.6"
     bl_category = "Smart Sharpen"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"

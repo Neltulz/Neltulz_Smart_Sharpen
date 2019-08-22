@@ -35,7 +35,7 @@
 
     <body>
 
-        <script type="text/javascript">
+        <script>
 
             function sidebarIframeLoaded() {
                 $( document ).ready(function() {
@@ -62,7 +62,7 @@
                 <div class='modal-content'>
                     <div class='modal-body'>
 
-                            <script type="text/javascript">
+                            <script>
                             
                             function iframeLoaded() {
                                 $('#licenseModal .modal-body').addClass('iframeLoaded')
@@ -88,7 +88,7 @@
 
 
             <h1 class="pageTitle">
-                Neltulz - Smart Sharpen<br><span class="versionNum">Version: 1.0.5<br>Last Update: 8/21/2019</span>
+                Neltulz - Smart Sharpen<br><span class="versionNum">Version: 1.0.6<br>Last Update: 8/21/2019</span>
             </h1>
 
             <div class="versionAndDownloadBar">
@@ -144,29 +144,29 @@
             </div>
 
             <div class="pageDesc">
-                <p>A <span class="focusText">context aware</span> workflow speedup utility, that enables automatic
-                <span class="focusText">sharpening</span>, <span class="focusText">smart sharpening</span>, and
-                <span class="focusText">sharp edge clearing</span> of vertices, edges, and faces, based on
+                <p>A <mark>context aware</mark> workflow speedup utility, that enables automatic
+                <mark>sharpening</mark>, <mark>smart sharpening</mark>, and
+                <mark>sharp edge clearing</mark> of vertices, edges, and faces, based on
                 selection.</p>
                 
-                <p>This utility automatically <span class="focusText">sharpens or clears sharps of edges</span>,
+                <p>This utility automatically <mark>sharpens or clears sharps of edges</mark>,
                 similar to how Autodesk Maya sets "hard or soft" edges when using the "soften/harden" feature.</p>
 
-                <p>It works by detecting which mode you're currently in <span class="focusText">(object or
-                mesh)</span>, then which selection mode <span class="focusText">(vertex, edge, or face)</span>,
-                whether you have the entire object <span class="focusText">selected, partially selected, or
-                completely deselected</span>.  It will then <span class="focusText">select sharp edges</span> by a
-                degree value, and then <span class="focusText">sharpen or clear sharps</span> accordingly to give
-                you a desired result.  If you are unsatisfied with the <span class="focusText">smart sharpen
-                result</span>, you can choose a different <span class="focusText">sharpen preset</span>
-                until it <span class="focusText">sharpens or clears sharp</span> only the edges you want.
+                <p>It works by detecting which mode you're currently in <mark>(object or
+                mesh)</mark>, then which selection mode <mark>(vertex, edge, or face)</mark>,
+                whether you have the entire object <mark>selected, partially selected, or
+                completely deselected</mark>.  It will then <mark>select sharp edges</mark> by a
+                degree value, and then <mark>sharpen or clear sharps</mark> accordingly to give
+                you a desired result.  If you are unsatisfied with the <mark>smart sharpen
+                result</mark>, you can choose a different <mark>sharpen preset</mark>
+                until it <mark>sharpens or clears sharp</mark> only the edges you want.
             
                 <p>This utility has the potential to speed up your workflow 5-10x, by allowing you to quickly clean
                 objects with incorrectly sharpened edges.</p>
             </div>
 
             <div class="youtubeVideo">
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/sLejGb8yQmE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/sLejGb8yQmE" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
 
             <h3>Table of Contents</h3>
@@ -185,39 +185,32 @@
             <h3 id="keyFeatures">Key Features</h3>
 
             <ul>
-                <li>Sharpen <span class="focusText">entire object</span> while in <span
-                class="focusText">Object</span> or
-                <span class="focusText">Mesh</span> mode</li>
+                <li>Sharpen <mark>entire object</mark> while in <mark>Object</mark> or
+                <mark>Mesh</mark> mode</li>
                 
-                <li>Soften (Clear Sharp) <span class="focusText">entire object</span> while in <span
-                class="focusText">Object</span> or <span class="focusText">Mesh</span> mode</li>
+                <li>Soften (Clear Sharp) <mark>entire object</mark> while in <mark>Object</mark> or <mark>Mesh</mark> mode</li>
                 
-                <li>Smart sharpen <span class="focusText">entire object</span> based on <span class="focusText">edge
-                angle (degrees)</span> while in <span class="focusText">Object</span> or <span
-                class="focusText">Mesh</span>
+                <li>Smart sharpen <mark>entire object</mark> based on <mark>edge
+                angle (degrees)</mark> while in <mark>Object</mark> or <mark>Mesh</mark>
                 mode</li>
                 
-                <li>Smart sharpen <span class="focusText">selection</span> based on <span class="focusText">edge
-                angle (degrees)</span> while in <span class="focusText">Mesh</span> mode</li>
+                <li>Smart sharpen <mark>selection</mark> based on <mark>edge
+                angle (degrees)</mark> while in <mark>Mesh</mark> mode</li>
                 
-                <li>Sharpen <span class="focusText">only selection</span> (multiple or single vertices, edges, or
+                <li>Sharpen <mark>only selection</mark> (multiple or single vertices, edges, or
                 faces)</li>
                 
-                <li>Clear sharp <span class="focusText">only selection</span> (multiple or single vertices, edges,
+                <li>Clear sharp <mark>only selection</mark> (multiple or single vertices, edges,
                 or faces)</li>
                 
-                <li>Access a lot of <span class="focusText">preset sharpen buttons</span> from the <span
-                class="focusText">Neltulz - Smart Sharpen Panel</span></li>
+                <li>Access a lot of <mark>preset sharpen buttons</mark> from the <mark>Neltulz - Smart Sharpen Panel</mark></li>
                 
-                <li>Hotkeys <span class="focusText">(CTRL+SHIFT+1 through 0)</span> to perform <span
-                class="focusText">preset sharpens</span></li>
+                <li>Hotkeys <mark>(CTRL+SHIFT+1 through 0)</mark> to perform <mark>preset sharpens</mark></li>
                 
-                <li>Work on <span class="focusText">multiple meshes</span> in both <span
-                class="focusText">Object</span> and
-                <span class="focusText">Edit</span> mode</li>
+                <li>Work on <mark>multiple meshes</mark> in both <mark>Object</mark> and
+                <mark>Edit</mark> mode</li>
                 
-                <li>Automatically Enable <span class="focusText">Auto smooth with 180 degrees</span> and <span
-                class="focusText">smooth shade</span> to guarantee auto sharpen result.</li>
+                <li>Automatically Enable <mark>Auto smooth with 180 degrees</mark> and <mark>smooth shade</mark> to guarantee auto sharpen result.</li>
             </ul>
 
             
@@ -225,25 +218,25 @@
             <h3 id="installation">Installation</h3>
 
             <ol>
-                <li>Download the <span class="focusText">Neltulz - Smart Sharpen</span> zip file anywhere on your
+                <li>Download the <mark>Neltulz - Smart Sharpen</mark> zip file anywhere on your
                 computer.</li>
                 
                 <li>Run Blender.</li>
                 
-                <li>Go to <span class="focusText">Edit > Preferences</span>.</li>
+                <li>Go to <mark>Edit > Preferences</mark>.</li>
                 
-                <li>In the left sidebar, go to <span class="focusText">Add-ons</span>.</li>
+                <li>In the left sidebar, go to <mark>Add-ons</mark>.</li>
                 
-                <li>At the top right, click <span class="focusText">Install</span>.</li>
+                <li>At the top right, click <mark>Install</mark>.</li>
                 
-                <li>Browse for the <span class="focusText">Neltulz - Smart Sharpen</span> zip file and click Install
+                <li>Browse for the <mark>Neltulz - Smart Sharpen</mark> zip file and click Install
                 Add-on from File <br>Alternatively, you may double click the zip file to install it.</li>
                 
-                <li>Next to Generic: <span class="focusText">Neltulz - Smart Sharpen</span>, enable the
+                <li>Next to Generic: <mark>Neltulz - Smart Sharpen</mark>, enable the
                 checkbox.</li>
                 
-                <li>At the lower left of the preferences window, click <span class="focusText">Save
-                Preferences</span> and close the preferences window.</li>
+                <li>At the lower left of the preferences window, click <mark>Save
+                Preferences</mark> and close the preferences window.</li>
             </ol>
 
             <h3 id="howToUse">How to Use</h3>
@@ -252,10 +245,10 @@
                 
                 <h5>Panel</h5>
                 
-                <p>You can access a list of preset <span class="focusText">Smart Sharpen</span> values by opening
-                the <span class="focusText">Neltulz - Smart Sharpen</span> panel.</p>
+                <p>You can access a list of preset <mark>Smart Sharpen</mark> values by opening
+                the <mark>Neltulz - Smart Sharpen</mark> panel.</p>
                 
-                <p>If you do not see the panel, click <span class="focusText">N</span> on your keyboard to active
+                <p>If you do not see the panel, click <mark>N</mark> on your keyboard to active
                 the panel sidebar.</p>
 
                 <h5>Hotkeys</h5>
@@ -354,21 +347,20 @@
             <ul>
                 <li>No pie menu, or popup context menu with preset options.</li>
                 
-                <li>Some of the hotkeys may not work.  If so, simply go to <span class="focusText">Edit >
+                <li>Some of the hotkeys may not work.  If so, simply go to <mark>Edit >
                 Preferences >
-                Keymap</span>, change the <span class="focusText">filter drop down menu</span> to <span
-                class="focusText">Key-Binding</span>, search for <span class="focusText">CTRL SHIFT 1</span> and
+                Keymap</mark>, change the <mark>filter drop down menu</mark> to <mark>Key-Binding</mark>, search for <mark>CTRL SHIFT 1</mark> and
                 disable any conflicting hotkeys.  Repeat this until all hotkeys work!</li>
                 
-                <li>When running the script on any new object, it will <span class="focusText">auto smooth normals
-                by 180 degrees</span>, and enable <span class="focusText">smooth shading mode</span> in order for
-                you to see your result.  The <span class="focusText">auto smooth normals</span> value is not yet
+                <li>When running the script on any new object, it will <mark>auto smooth normals
+                by 180 degrees</mark>, and enable <mark>smooth shading mode</mark> in order for
+                you to see your result.  The <mark>auto smooth normals</mark> value is not yet
                 customizable, and will override back to 180 degrees every time you run this script.</li>
             </ul>
 
             <h3 id="license">License</h3>
 
-            <p>This addon is using the <span class="focusText"><a href="https://choosealicense.com/licenses/gpl-3.0/" target="_blank">GNU GPL v3.0</a></span>.</p>
+            <p>This addon is using the <mark><a href="https://choosealicense.com/licenses/gpl-3.0/" target="_blank">GNU GPL v3.0</a></mark>.</p>
 
             <div class="alert alert-dark quote">
 
@@ -415,6 +407,7 @@
             <h3 id="changelog">Changelog</h3>
 
                 <ul>
+                    <li>2019-08-22 - Fixed a bug when trying to sharpen objects when their mesh names do not match their object names.</li>
                     <li>2019-08-21
                         <ul>
                             <li>Multi Object while in Edit Mode now smart sharpens correctly</li>
