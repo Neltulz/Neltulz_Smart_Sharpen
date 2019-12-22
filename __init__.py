@@ -3,7 +3,7 @@ bl_info = {
     "author" : "Neil V. Moore",
     "description" : "Context Aware Smart Sharpen",
     "blender" : (2, 80, 0),
-    "version" : (1, 0, 7),
+    "version" : (1, 0, 8),
     "location" : "View3D",
     "warning" : "",
     "category" : "Generic"
@@ -19,6 +19,7 @@ from . properties import NeltulzSmartSharpen_IgnitProperties
 from . main_ot import OBJECT_OT_NeltulzSmartSharpen
 from . misc_ot import OBJECT_OT_NeltulzSmartSharpen_ResetSettings
 from . addon_preferences import OBJECT_OT_NeltulzSubD_Preferences
+from . panels import OBJECT_PT_Test
 from . panels import OBJECT_PT_NeltulzSmartSharpen
 from . import keymaps
 
@@ -34,6 +35,7 @@ classes = (
     OBJECT_OT_NeltulzSmartSharpen_ResetSettings,
     OBJECT_OT_NeltulzSmartSharpen,
     OBJECT_OT_NeltulzSubD_Preferences,
+    OBJECT_PT_Test,
     OBJECT_PT_NeltulzSmartSharpen,
 )
 
@@ -71,4 +73,4 @@ if __name__ == "__main__":
     register()
 
     # test call
-    bpy.ops.object.neltulz_smart_sharpen()
+    bpy.ops.ntz_smrt_shrp.neltulz_smart_sharpen()

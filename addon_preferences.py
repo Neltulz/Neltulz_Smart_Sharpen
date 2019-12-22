@@ -50,7 +50,7 @@ class OBJECT_OT_NeltulzSubD_Preferences(AddonPreferences):
     category: StringProperty(
             name="Tab Category",
             description="Choose a name for the category of the panel",
-            default="Smart Sharpen",
+            default="Neltulz",
             update=update_panel
             )
 

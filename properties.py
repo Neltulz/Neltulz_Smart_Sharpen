@@ -20,18 +20,17 @@ def resetSettings(self, context):
     if not self.bUseAdvancedSettingsCheckbox:
         if not self.bPreventAdvancedSettingsUpdate:
 
-            bpy.ops.object.neltulz_smart_sharpen_reset_settings()
+            bpy.ops.ntz_smrt_shrp.reset_settings()
 
 
 
 
 class NeltulzSmartSharpen_IgnitProperties(bpy.types.PropertyGroup):
 
-    bUseAdvancedSettingsCheckbox : BoolProperty (
-        name="Use Advanced Options",
-        description="Reveals advanced options.",
+    bShowHideOptions : BoolProperty (
+        name="Show/Hide Options",
+        description="Reveals options.",
         default = False,
-        update=resetSettings
     )
 
     bPreventAdvancedSettingsUpdate : BoolProperty(
@@ -40,10 +39,17 @@ class NeltulzSmartSharpen_IgnitProperties(bpy.types.PropertyGroup):
         default = False
     )
 
-    bSmoothShadeCheckbox : BoolProperty(
-        name="Smooth Shade Object",
-        description="Enables smooth shading on object.  Recommended (True) to guarantee smart sharpen result.",
-        default = True
+    smoothShadeObject_List = [
+        ("UNSET",      "Unset (Use last known)",  "", 0),
+        ("SMOOTH",     "Yes",    "", 1),
+        ("NO_SMOOTH",  "No",     "", 2),
+    ]
+
+    smoothShadeObject : EnumProperty (
+        items       = smoothShadeObject_List,
+        name        = "Smooth Shade Object",
+        description = "Whether to smooth shade object or not",
+        default     = "SMOOTH"
     )
 
     bAutoSmoothCheckbox : BoolProperty(
@@ -58,10 +64,4 @@ class NeltulzSmartSharpen_IgnitProperties(bpy.types.PropertyGroup):
         default = 180,
         min = 0,
         max = 180
-    )
-
-    bDisableErrorPopupsCheckbox : BoolProperty(
-        name="Disable Error Popups - I know what I'm doing.",
-        description="I know what I'm doing",
-        default = False
     )

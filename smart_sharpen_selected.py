@@ -12,21 +12,15 @@ def execute(self, context, currentObj, currentSel_vertIDs, currentSel_edgeIDs, c
         #if current select mode is vertice, use verts when marking sharp, otherwise sharpen normally
         if misc_functions.getCurrentSelectMode(self, context) == 1:
             bpy.ops.mesh.mark_sharp(use_verts=True)
-            
-            print('---[INFO]---: The selection was sharpened')
         else:
             bpy.ops.mesh.mark_sharp(use_verts=False)
-
-            print('---[INFO]---: The selection was softened')
         
     elif self.degreesValue >= 180:
         #if current select mode is vertice, use verts when marking soft, otherwise soften normally
         if misc_functions.getCurrentSelectMode(self, context) == 1:
             bpy.ops.mesh.mark_sharp(clear=True, use_verts=True)
-            print('---[INFO]---: Only the selected things were softened (Including Vertices)')
         else:
             bpy.ops.mesh.mark_sharp(clear=True, use_verts=False)
-            print('---[INFO]---: Only the selected things were softened')
     else:
 
         
@@ -128,6 +122,4 @@ def execute(self, context, currentObj, currentSel_vertIDs, currentSel_edgeIDs, c
 
         #switch to Edit Mode
         bpy.ops.object.editmode_toggle()
-
-        print('---[INFO]---: Selected sharp edges by ' + str(self.degreesValue) + 'deg (' + str(sharpnessValue) + ') and sharpened')
 # END smart_sharp_selected()

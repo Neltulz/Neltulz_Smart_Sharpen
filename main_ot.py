@@ -2,6 +2,10 @@ import bpy
 from . import misc_functions
 from . import smart_sharpen_entire_obj
 from . import smart_sharpen_selected
+from . misc_layout import createShowHide
+from . misc_layout import createProp
+
+from bpy.props import (StringProperty, BoolProperty, IntProperty, FloatProperty, FloatVectorProperty, EnumProperty, PointerProperty)
 
 # -----------------------------------------------------------------------------
 #    Smart Sharpen Operator
@@ -9,27 +13,81 @@ from . import smart_sharpen_selected
 
 class OBJECT_OT_NeltulzSmartSharpen(bpy.types.Operator):
     """Tooltip"""
-    bl_idname = "object.neltulz_smart_sharpen"
+    bl_idname = "ntz_smrt_shrp.neltulz_smart_sharpen"
     bl_label = "Neltulz - Smart Sharpen"
     bl_description = "Context Aware Smart Sharpen"
+    bl_options = {'REGISTER', 'UNDO'}
 
-    degreesValue: bpy.props.FloatProperty \
-    (
-        name="Degrees Value =",
+    degreesValue : FloatProperty (
+        name="Degrees Value",
         description="Degrees you would like to smart sharpen edges by",
         default=1,
         min = 0,
         max = 180
     )
 
+    showSmoothShadeObjectOptions : BoolProperty (
+        name="Show Smooth Shade Object",
+        description="Show Smooth Shade Object",
+        default=False,
+    )
+
+    smoothShadeObject : BoolProperty (
+        name="Smooth Shade Object",
+        description="Smooth Shade Object",
+        default=True,
+    )
+
+    autoSmoothNormals : BoolProperty (
+        name="Auto Smooth Normals",
+        description="Auto Smooth Normals",
+        default=True,
+    )
+
+    autoSmoothAngle : FloatProperty (
+        name="Auto Smooth Angle",
+        description="Auto Smooth Angle",
+        default=180,
+        min = 0,
+        max = 180,
+    )
+
+    
+
     @classmethod
     def poll(cls, context):
         return context.active_object is not None
 
-    def execute(self, context):
+        
+    def draw(self, context):
 
-        print('---[INFO]---: --------------------------------------------------------------------------------')
-        print('---[INFO]---: Neltulz - Smart Sharpen - Started')
+        layout = self.layout
+
+
+
+        createProp(self, context, None, "Degrees", "degreesValue", layout, 1)
+        
+        layout.separator()
+
+        smoothShadeOptions = layout.box()
+
+        createShowHide(self, context, None, self, "showSmoothShadeObjectOptions", "smoothShadeObject", "Smooth Shade Object", smoothShadeOptions)
+
+        if self.showSmoothShadeObjectOptions:
+            row = smoothShadeOptions.row(align=True)
+            spacer = row.column(align=True)
+            spacer.ui_units_x = 1
+            spacer.label(text=" ")
+            autoSmoothCol = row.column(align=True)
+            autoSmoothCol.ui_units_x = 10000
+
+            autoSmoothCol.prop(self, "autoSmoothNormals")
+            createProp(self, context, None, "Angle", "autoSmoothAngle", smoothShadeOptions, 1)
+
+
+    # END draw()
+
+    def execute(self, context):
 
         # -----------------------------------------------------------------------------
         #   Check whether user is in "Edit Mode" or "Object Mode"
@@ -40,8 +98,7 @@ class OBJECT_OT_NeltulzSmartSharpen(bpy.types.Operator):
         previousSelectMode = misc_functions.getCurrentSelectMode(self, context)
 
         if bpy.context.object.mode == "EDIT":
-            
-            print('---[INFO]---: "Edit mode" Detected')
+        
 
             # -----------------------------------------------------------------------------
             #   Smooth Mesh & Set smoothing angle to 180 degrees. This ensures that auto
@@ -81,17 +138,8 @@ class OBJECT_OT_NeltulzSmartSharpen(bpy.types.Operator):
 
                 #if user has multiple select modes enabled, then fail and prevent the script from doing anything further
                 if misc_functions.getCurrentSelectMode(self, context) == 0:
-                    print('---[ERROR]---: Multiple Select mode is unsupported.  Please select only one mode (Vertice, Edge, or Face')
-
+                    self.report({'WARNING'}, 'Please select only one mode (Vertice, Edge, or Face')
                 else:
-                    
-                    #print which selection mode is detected
-                    if misc_functions.getCurrentSelectMode(self, context) == 1:
-                        print('---[INFO]---: Vertice Select Mode" Detected')
-                    elif misc_functions.getCurrentSelectMode(self, context) == 2:
-                        print('---[INFO]---: Edge Select Mode" Detected')
-                    else:
-                        print('---[INFO]---: Face Select Mode" Detected')
 
                     #store a list of currently selected vertice indices
                     currentSel_vertIDs = set()
@@ -119,13 +167,10 @@ class OBJECT_OT_NeltulzSmartSharpen(bpy.types.Operator):
 
                     #print the number of selected vertices, edges, and faces
                     numVerts_Selected = len( [v for v in currentObj.data.vertices if v.select] )
-                    print('---[INFO]---: Detected ' + str(numVerts_Selected) + ' vertices selected')
                     
                     numEdges_Selected = len( [e for e in currentObj.data.edges if e.select] )
-                    print('---[INFO]---: Detected ' + str(numEdges_Selected) + ' edges selected')
                     
                     numFaces_Selected = len( [f for f in currentObj.data.polygons if f.select] )
-                    print('---[INFO]---: Detected ' + str(numFaces_Selected) + ' faces selected')
 
                     smart_sharpen_selected.execute(self, context, currentObj, currentSel_vertIDs, currentSel_edgeIDs, currentSel_faceIDs, currentDesel_edgeIDs)
 
@@ -149,7 +194,6 @@ class OBJECT_OT_NeltulzSmartSharpen(bpy.types.Operator):
             #detect if something is selected
             if bpy.context.selected_objects:
 
-                print('---[INFO]---: Object mode" Detected')
 
                 #Smooth mesh
                 misc_functions.smoothShadeAndAutoSmoothNormals(self, context)
@@ -177,14 +221,11 @@ class OBJECT_OT_NeltulzSmartSharpen(bpy.types.Operator):
                 bpy.ops.object.editmode_toggle()
 
             else:
-                print('---[ERROR]---: Please select an object before running the script!')
+                self.report({'WARNING'}, 'Please select an object before running the script')
 
         else:
-            print('---[ERROR]---: Unable to detect "object" or "edit" mode.  Canceling.')
+            self.report({'WARNING'}, 'Unable to detect "object" or "edit" mode.  Canceling')
 
-        print('---[INFO]---:  ')
-        print('---[INFO]---: Neltulz - Smart Sharpen - Finished')
-        print('---[INFO]---: --------------------------------------------------------------------------------')
 
         return {'FINISHED'}
     # END execute()
