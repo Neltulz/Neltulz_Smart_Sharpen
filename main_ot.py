@@ -11,7 +11,7 @@ from bpy.props import (StringProperty, BoolProperty, IntProperty, FloatProperty,
 #    Smart Sharpen Operator
 # -----------------------------------------------------------------------------    
 
-class OBJECT_OT_NeltulzSmartSharpen(bpy.types.Operator):
+class NTZSMSHRP_OT_smartsharpen(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "ntz_smrt_shrp.neltulz_smart_sharpen"
     bl_label = "Neltulz - Smart Sharpen"

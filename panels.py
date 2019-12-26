@@ -1,13 +1,29 @@
 
 import bpy
-from . properties import NeltulzSmartSharpen_IgnitProperties
-from . misc_layout import createShowHide
+from . properties import NTZSMSHRP_ignitproperties
+from . import misc_layout
 
 from bpy.props import (StringProperty, BoolProperty, IntProperty, FloatProperty, FloatVectorProperty, EnumProperty, PointerProperty)
 from bpy.types import (Panel, Operator, AddonPreferences, PropertyGroup, Menu)
 
-class OBJECT_PT_Test(Panel):
-    bl_idname = "OBJECT_PT_Test"
+class NTZSMSRHP_PT_options(Panel):
+    bl_idname = "NTZSMSRHP_PT_options"
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "UI"
+    bl_label = "Options"
+
+    def draw(self, context):
+        scene = context.scene
+        layout = self.layout
+
+        optionsSection = layout.column(align=True)
+
+        misc_layout.createPanelOptionsSection(self, context, scene, optionsSection)
+
+    #END draw()
+
+class NTZSMSHRP_PT_edgedisplayoptions(Panel):
+    bl_idname = "NTZSMSHRP_PT_edgedisplayoptions"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
     bl_label = "Test"
@@ -22,14 +38,7 @@ class OBJECT_PT_Test(Panel):
         buttonRow = layout.row(align=True)
         buttonRow.scale_y = 1.5
 
-        if context.space_data.overlay.show_edge_sharp:
-            sharpText = "Sharp (Enabled)"
-            sharpIcon = "SHARPCURVE"
-        else:
-            sharpText = "Sharp (Disabled)"
-            sharpIcon = "SPHERECURVE"
-
-        buttonRow.prop(context.space_data.overlay, "show_edge_sharp",        toggle=True, text=sharpText, icon=sharpIcon )
+        buttonRow.prop(context.space_data.overlay, "show_edge_sharp",        toggle=True, text="Sharp", icon="SHARPCURVE" )
         
 
         layout.label(text="Others")
@@ -39,10 +48,9 @@ class OBJECT_PT_Test(Panel):
         buttonRow.prop(context.space_data.overlay, "show_edge_bevel_weight", toggle=True, text="Bevel" )
         buttonRow.prop(context.space_data.overlay, "show_edge_seams",        toggle=True, text="Seams" )
 
-class OBJECT_PT_NeltulzSmartSharpen(Panel):
+class NTZSMSHRP_PT_sidebarpanel(Panel):
 
-    bl_idname = "ntz_smrt_shrp.neltulz_smart_sharpen_panel"
-    bl_label = "Smart Sharpen v1.0.8"
+    bl_label = "Smart Sharpen v1.0.9"
     bl_category = "Neltulz"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
@@ -52,10 +60,17 @@ class OBJECT_PT_NeltulzSmartSharpen(Panel):
         layout = self.layout
         scene = context.scene
 
+        #determine if panel is inside of a popop/pie menu
+        panelInsidePopupOrPie = context.region.type == 'WINDOW'
+
+        if panelInsidePopupOrPie:
+            layout.ui_units_x = 13
+            layout.label(text="Neltulz - Smart Sharpen v1.0.9")
+
         col = layout.column(align=True)
 
         #Create buttons for 0 (Full Sharp) and 180 (Full Soft)
-        col = layout.column()
+        col = layout.column(align=True)
         row = col.row(align=True)
         row.scale_y = 1.5
 
@@ -68,21 +83,19 @@ class OBJECT_PT_NeltulzSmartSharpen(Panel):
         popoverRow = row.column(align=True)
         popoverRow.scale_x = 1.5
 
-        if context.space_data.overlay.show_edge_sharp:
-            popoverIcon = "SHARPCURVE"
-        else:
-            popoverIcon = "SPHERECURVE"
-
         popover = popoverRow.prop_with_popover(
             scene.neltulzSmartSharpen,
-            "smoothShadeObject",
+            "sharpEdgeDisplay_PopoverEnum",
             text="",
-            icon=popoverIcon,
+            icon="SHARPCURVE",
             icon_only=True,
-            panel="OBJECT_PT_Test",
+            panel="NTZSMSHRP_PT_edgedisplayoptions",
         )
         
-        
+        if panelInsidePopupOrPie:
+            sep = layout.column(align=True)
+            sep.label(text=" ")
+            sep.scale_y = 0.1
 
         degreesList = [3, 5, 10, 15, 25, 35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 145, 155, 165, 175]
 
@@ -110,55 +123,37 @@ class OBJECT_PT_NeltulzSmartSharpen(Panel):
         #   Use Advanced Settings Box
         # -----------------------------------------------------------------------------
 
-        advancedSettingsWrapper = layout.column(align=True)
 
-        advancedOptionsSection = advancedSettingsWrapper.column(align=True)
-        
+        optionsSection = layout.column(align=True)
+                
+        if not panelInsidePopupOrPie:
 
+            #create show/hide toggle for options section
+            misc_layout.createShowHide(self, context, scene, "neltulzSmartSharpen", "bShowHideOptions", None, "Options", optionsSection)
 
-        #create show/hide toggle for options section
-        createShowHide(self, context, scene, "neltulzSmartSharpen", "bShowHideOptions", None, "Options", advancedOptionsSection)
+            if scene.neltulzSmartSharpen.bShowHideOptions:
 
-        
+                optionsSection.separator()
+                
+                optionsSectionRow = optionsSection.row(align=True)
 
-        if scene.neltulzSmartSharpen.bShowHideOptions:
+                spacer = optionsSectionRow.column(align=True)
+                spacer.label(text="", icon="BLANK1")
+                spacer.alignment="LEFT"
 
-            advancedOptionsSection.separator()
+                optionsCol = optionsSectionRow.column(align=True)
 
-            advancedOptionsRow = advancedOptionsSection.row(align=True)
+                misc_layout.createPanelOptionsSection(self, context, scene, optionsCol)
 
-            leftSpacer = advancedOptionsRow.column(align=True)
-            leftSpacer.label(text=" ")
-            leftSpacer.alignment= "LEFT"
-            leftSpacer.ui_units_x = 1
-
-            advancedOptionsCol = advancedOptionsRow.column(align=True)
-            advancedOptionsCol.alignment="EXPAND"
-            advancedOptionsCol.ui_units_x = 100000
-
-            col = advancedOptionsCol.column(align=True)
+        else:
             
-            col.label(text="Smooth Shade Object:")
-            col.prop(scene.neltulzSmartSharpen, "smoothShadeObject", text="" )
-            
-            if scene.neltulzSmartSharpen.smoothShadeObject == "SMOOTH":
+            optionsSection.separator()
 
-                smoothNormalsBox = advancedOptionsCol.box()
-                smoothNormalsBox.prop(scene.neltulzSmartSharpen, "bAutoSmoothCheckbox", text="Auto Smooth Normals" )
-
-                col = smoothNormalsBox.column()
-                row = col.row(align=True)
-                row.label(text="Angle")
-                row.prop(scene.neltulzSmartSharpen, "bAutoSmoothSlider", text='')
-
-                row.enabled = scene.neltulzSmartSharpen.bAutoSmoothCheckbox
-            
-            col = advancedOptionsCol.column()
-            row = col.row(align=True)
-            
-            col.separator()
-
-            col = advancedOptionsCol.column()
-            row = col.row(align=True)
-            op = row.operator('ntz_smrt_shrp.reset_settings', text="Reset Settings")
-
+            popover = optionsSection.prop_with_popover(
+                scene.neltulzSmartSharpen,
+                "optionsPopoverEnum",
+                text="",
+                icon="NONE",
+                icon_only=False,
+                panel="NTZSMSRHP_PT_options",
+            )

@@ -2,7 +2,7 @@
 # recommended by "cytoo"
 
 import bpy
-from . panels import OBJECT_PT_NeltulzSmartSharpen
+from . panels import NTZSMSHRP_PT_sidebarpanel
 
 from bpy.props import (StringProperty,
                        BoolProperty,
@@ -20,7 +20,7 @@ from bpy.types import (Panel,
 
 # Define Panel classes for updating
 panels = (
-        OBJECT_PT_NeltulzSmartSharpen,
+        NTZSMSHRP_PT_sidebarpanel,
         )
 
         
@@ -42,7 +42,7 @@ def update_panel(self, context):
         pass
 
 
-class OBJECT_OT_NeltulzSubD_Preferences(AddonPreferences):
+class NTZSMSHRP_OT_addonprefs(AddonPreferences):
     # this must match the addon name, use '__package__'
     # when defining this in a submodule of a python package.
     bl_idname = __package__

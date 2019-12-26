@@ -48,3 +48,30 @@ def createProp(self, context, scene, labelText, propItem, layout, scale_y):
     propRowItem.alignment="EXPAND"
     propRowItem.scale_x = 1
     propRowItem.prop(self, propItem, text="", expand=True)
+
+def createPanelOptionsSection(self, context, scene, layout):
+    
+    
+    layout.label(text="Smooth Shade Object:")
+    layout.prop(scene.neltulzSmartSharpen, "smoothShadeObject", text="" )
+    
+    if scene.neltulzSmartSharpen.smoothShadeObject == "SMOOTH":
+
+        smoothNormalsBox = layout.box()
+        smoothNormalsBox.prop(scene.neltulzSmartSharpen, "bAutoSmoothCheckbox", text="Auto Smooth Normals" )
+
+        col = smoothNormalsBox.column()
+        row = col.row(align=True)
+        row.label(text="Angle")
+        row.prop(scene.neltulzSmartSharpen, "bAutoSmoothSlider", text='')
+
+        row.enabled = scene.neltulzSmartSharpen.bAutoSmoothCheckbox
+    
+    col = layout.column(align=True)
+    row = col.row(align=True)
+    
+    col.separator()
+
+    col = layout.column()
+    row = col.row(align=True)
+    op = row.operator('ntz_smrt_shrp.reset_settings', text="Reset Settings")

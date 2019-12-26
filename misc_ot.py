@@ -1,12 +1,12 @@
 import bpy
-from . properties import NeltulzSmartSharpen_IgnitProperties
+from . properties import NTZSMSHRP_ignitproperties
 from . import misc_functions
 
 # -----------------------------------------------------------------------------
 #    Reset settings
 # -----------------------------------------------------------------------------    
 
-class OBJECT_OT_NeltulzSmartSharpen_ResetSettings(bpy.types.Operator):
+class NTZSMSHRP_OT_resetallsettings(bpy.types.Operator):
     """Tooltip"""
     bl_idname = "ntz_smrt_shrp.reset_settings"
     bl_label = "Neltulz - Smart Sharpen : Reset Settings"

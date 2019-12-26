@@ -3,7 +3,7 @@ bl_info = {
     "author" : "Neil V. Moore",
     "description" : "Context Aware Smart Sharpen",
     "blender" : (2, 80, 0),
-    "version" : (1, 0, 8),
+    "version" : (1, 0, 9),
     "location" : "View3D",
     "warning" : "",
     "category" : "Generic"
@@ -15,12 +15,14 @@ bl_info = {
 
 import bpy
 
-from . properties import NeltulzSmartSharpen_IgnitProperties
-from . main_ot import OBJECT_OT_NeltulzSmartSharpen
-from . misc_ot import OBJECT_OT_NeltulzSmartSharpen_ResetSettings
-from . addon_preferences import OBJECT_OT_NeltulzSubD_Preferences
-from . panels import OBJECT_PT_Test
-from . panels import OBJECT_PT_NeltulzSmartSharpen
+from . properties           import NTZSMSHRP_ignitproperties
+from . main_ot              import NTZSMSHRP_OT_smartsharpen
+from . misc_ot              import NTZSMSHRP_OT_resetallsettings
+from . addon_preferences    import NTZSMSHRP_OT_addonprefs
+from . panels               import NTZSMSHRP_PT_edgedisplayoptions
+from . panels               import NTZSMSRHP_PT_options
+from . panels               import NTZSMSHRP_PT_sidebarpanel
+
 from . import keymaps
 
 PendingDeprecationWarning
@@ -31,12 +33,13 @@ PendingDeprecationWarning
 # -----------------------------------------------------------------------------  
 
 classes = (
-    NeltulzSmartSharpen_IgnitProperties,
-    OBJECT_OT_NeltulzSmartSharpen_ResetSettings,
-    OBJECT_OT_NeltulzSmartSharpen,
-    OBJECT_OT_NeltulzSubD_Preferences,
-    OBJECT_PT_Test,
-    OBJECT_PT_NeltulzSmartSharpen,
+    NTZSMSHRP_ignitproperties,
+    NTZSMSHRP_OT_resetallsettings,
+    NTZSMSHRP_OT_smartsharpen,
+    NTZSMSHRP_OT_addonprefs,
+    NTZSMSHRP_PT_edgedisplayoptions,
+    NTZSMSRHP_PT_options,
+    NTZSMSHRP_PT_sidebarpanel,
 )
 
 # -----------------------------------------------------------------------------
@@ -57,7 +60,7 @@ def register():
     keymaps.neltulz_smart_sharpen_register_keymaps(addon_keymaps)
 
     #add property group to the scene
-    bpy.types.Scene.neltulzSmartSharpen = bpy.props.PointerProperty(type=NeltulzSmartSharpen_IgnitProperties)
+    bpy.types.Scene.neltulzSmartSharpen = bpy.props.PointerProperty(type=NTZSMSHRP_ignitproperties)
 
 
 def unregister():

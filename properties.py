@@ -25,12 +25,23 @@ def resetSettings(self, context):
 
 
 
-class NeltulzSmartSharpen_IgnitProperties(bpy.types.PropertyGroup):
+class NTZSMSHRP_ignitproperties(bpy.types.PropertyGroup):
 
     bShowHideOptions : BoolProperty (
         name="Show/Hide Options",
         description="Reveals options.",
         default = False,
+    )
+
+    optionsPopoverEnum_List = [
+        ("OPTIONS", "Options", "", "", 0),
+    ]
+
+    optionsPopoverEnum : EnumProperty (
+        items       = optionsPopoverEnum_List,
+        name        = "Options Popover Enum",
+        description = "Options Popover Enum",
+        default     = "OPTIONS"
     )
 
     bPreventAdvancedSettingsUpdate : BoolProperty(
@@ -51,6 +62,20 @@ class NeltulzSmartSharpen_IgnitProperties(bpy.types.PropertyGroup):
         description = "Whether to smooth shade object or not",
         default     = "SMOOTH"
     )
+
+    sharpEdgeDisplay_PopoverEnum_List = [
+        ("SHARP_ENABLED",  "",  "", "SHARPCURVE", 0),
+        ("SHARP_DISABLED", "", "", "SPHERECURVE", 1),
+    ]
+
+    sharpEdgeDisplay_PopoverEnum : EnumProperty (
+        items       = sharpEdgeDisplay_PopoverEnum_List,
+        name        = "Sharp Edge Popover Enum",
+        description = "Sharp Edge Popover Enum",
+        default     = "SHARP_ENABLED"
+    )
+
+
 
     bAutoSmoothCheckbox : BoolProperty(
         name="Auto Smooth Normals",
