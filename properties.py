@@ -33,6 +33,17 @@ class NTZSMSHRP_ignitproperties(bpy.types.PropertyGroup):
         default = False,
     )
 
+    additionalDegreesEnum_List = [
+        ("MORE", "More...", "", "", 0),
+    ]
+
+    additionalDegreesEnum : EnumProperty (
+        items       = additionalDegreesEnum_List,
+        name        = "Additional Degrees Popover Enum",
+        description = "Additional Degrees Popover Enum",
+        default     = "MORE"
+    )
+
     optionsPopoverEnum_List = [
         ("OPTIONS", "Options", "", "", 0),
     ]

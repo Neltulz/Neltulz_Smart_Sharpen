@@ -39,6 +39,10 @@ p {
     
 }
 
+.roundCorners {
+    border-radius: 5px
+}
+
 html.sidebarIframeLoaded #sidebar {
     width: 300px;
     opacity: 1;

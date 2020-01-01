@@ -39,10 +39,10 @@ def smoothShadeAndAutoSmoothNormals(self, context):
     
     scene = context.scene
 
-    sel_objs = [obj for obj in bpy.context.selected_objects if obj.type == 'MESH']
+    selObjs = [obj for obj in bpy.context.selected_objects if obj.type == 'MESH']
 
     #Enable auto smooth
-    for currentObject in sel_objs:
+    for currentObject in selObjs:
 
         #Smooth shade mesh
         if self.smoothShadeObject:
@@ -55,9 +55,9 @@ def smoothShadeAndAutoSmoothNormals(self, context):
         currentObject.data.use_auto_smooth = self.autoSmoothNormals
     
         #Set auto smooth angle 
-        if scene.neltulzSmartSharpen.bAutoSmoothCheckbox:
+        if self.autoSmoothNormals:
 
-            currentObject.data.auto_smooth_angle = scene.neltulzSmartSharpen.bAutoSmoothSlider*(3.14159/180)
+            currentObject.data.auto_smooth_angle = self.autoSmoothAngle*(3.14159/180)
 
         else:
             self.report({'WARNING'}, '"Auto Smooth Normals" is disabled!  Please enable "Auto Smooth Normals" fom the "Neltulz - Smart Sharpen" Panel to see a result!' )
@@ -69,7 +69,7 @@ def smoothShadeAndAutoSmoothNormals(self, context):
         bpy.ops.object.shade_smooth()
 
         #Enable auto smooth
-        for currentObject in sel_objs:
+        for currentObject in selObjs:
             currentObject.data.use_auto_smooth = self.autoSmoothNormals
 
             #set angle to 180 degrees

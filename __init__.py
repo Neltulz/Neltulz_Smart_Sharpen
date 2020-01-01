@@ -3,7 +3,7 @@ bl_info = {
     "author" : "Neil V. Moore",
     "description" : "Context Aware Smart Sharpen",
     "blender" : (2, 80, 0),
-    "version" : (1, 0, 9),
+    "version" : (1, 0, 10),
     "location" : "View3D",
     "warning" : "",
     "category" : "Generic"
@@ -21,6 +21,7 @@ from . misc_ot              import NTZSMSHRP_OT_resetallsettings
 from . addon_preferences    import NTZSMSHRP_OT_addonprefs
 from . panels               import NTZSMSHRP_PT_edgedisplayoptions
 from . panels               import NTZSMSRHP_PT_options
+from . panels               import NTZSMSRHP_PT_additionaldegreescompact
 from . panels               import NTZSMSHRP_PT_sidebarpanel
 
 from . import keymaps
@@ -39,6 +40,7 @@ classes = (
     NTZSMSHRP_OT_addonprefs,
     NTZSMSHRP_PT_edgedisplayoptions,
     NTZSMSRHP_PT_options,
+    NTZSMSRHP_PT_additionaldegreescompact,
     NTZSMSHRP_PT_sidebarpanel,
 )
 
@@ -54,7 +56,8 @@ def register():
         register_class(cls)
 
     # update panel name
-    addon_preferences.update_panel(None, bpy.context)
+    prefs = bpy.context.preferences.addons[__name__].preferences
+    addon_preferences.update_panel(prefs, bpy.context)
 
     #add keymaps from keymaps.py
     keymaps.neltulz_smart_sharpen_register_keymaps(addon_keymaps)
